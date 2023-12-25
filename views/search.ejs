@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+
+<body>
+  <input style="color: black;" type="text" placeholder="Enter music title">
+  <button onclick="searchSong()" style="color: black;">search</button>
+
+  <div class="right" style="width: 100%;">
+    <div class="musics">
+
+    </div>
+  </div>
+
+  <audio src="/stream/69b554779eb6502777e310ed0d0c41ff4ea78e35" controls></audio>
+  </div>
+
+
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js" integrity="sha512-emSwuKiMyYedRwflbZB2ghzX8Cw8fmNVgZ6yQNNXXagFzFOaQmbvQ1vmDkddHjm5AITcBIZfC7k4ShQSjgPAmQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script>
+    async function searchSong() {
+      const result = await axios.post('/search', {
+        search: document.querySelector('input').value
+      })
+
+      let clutter = ''
+
+      result.data.songs.forEach(song => {
+        clutter += ` <div class="song" onclick="songCardClicked('${song.fileName}')">
+          <img src="/poster/${song.poster}" alt="">
+          <div class="text">
+            <h5>${song.title}</h5>
+            <p> ${song.artist}</p>
+            <p> ${song.album}</p>
+          </div>
+          <div class="playButton">
+            <i class="ri-play-circle-fill"></i>
+          </div>
+        </div>`
+      });
+
+      document.querySelector('.musics').innerHTML = clutter
+
+
+
+    }
+
+    function songCardClicked(filename) {
+      document.querySelector('audio').setAttribute('src', `/stream/${filename}`)
+      document.querySelector('audio').play()
+    }
+  </script>
+
+</body>
+
+</html>
